@@ -13,6 +13,7 @@ class Calculator{
     delete(){
         this.currentOperand = this.currentOperand.toString().slice(0,-1)
     }
+    
     appendNumber(number){
         if (number == '.' && this.currentOperand.includes('.'))return
         this.currentOperand = this.currentOperand.toString() + number.toString()        
@@ -50,12 +51,31 @@ class Calculator{
         this.currentOperand = computation
         this.operation = undefined
         this.previousOperand = ""
-    }
+    }   
+    getDisplayNumber(number){
+        const stringNumber = number.toString()
+        const integerDigits = parseFloat(stringNumber.split('.')[0])
+        const decimaldigits = stringNumber.split('.')[1]
+        let integerDisplay
+        if(isNaN(integerDigits)){
+            integerDisplay = ""
+        }else{
+            integerDisplay = integerDigits.toLocaleString('en', {maximumFractionDigits: 0})
+        }
+        if(decimaldigits != null){
+            return `${integerDisplay}.${decimaldigits}`
+        }else{
+            return integerDisplay
+        }
+        
+    } 
     updateDisplay(){
-        this.currentOutputElement.innerText = this.currentOperand
+        this.currentOutputElement.innerText = this.getDisplayNumber(this.currentOperand)
         if(this.operation != null){
             this.previousOutputElement.innerText = `${this.previousOperand} ${this.operation}`
-        }                    
+        }else{
+            this.previousOutputElement.innerText = ''
+        }                  
     }
 }
 
